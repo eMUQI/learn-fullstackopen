@@ -5,7 +5,12 @@ const Button = ({ handleClick, name }) => (
   <button onClick={handleClick}>{name}</button>
 )
 
-const Statistic = ({ text, value }) => (<p>{text} {value}</p>)
+const Statistic = ({ text, value }) => (
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
+)
 
 const Statistics = ({ good, neutral, bad }) => {
   let avaerage = (good - bad) / (good + neutral + bad)
@@ -20,14 +25,14 @@ const Statistics = ({ good, neutral, bad }) => {
     )
   }
   return (
-    <div>
-      <Statistic text="good" value={good}/>
-      <Statistic text="neutral" value={neutral}/>
-      <Statistic text="bad" value={bad}/>
-      <Statistic text="all" value={all}/>
-      <Statistic text="avaerag" value={avaerage}/>
-      <Statistic text="positive" value={positive.toString()+"%"}/>
-    </div>
+    <table>
+      <Statistic text="good" value={good} />
+      <Statistic text="neutral" value={neutral} />
+      <Statistic text="bad" value={bad} />
+      <Statistic text="all" value={all} />
+      <Statistic text="avaerag" value={avaerage} />
+      <Statistic text="positive" value={positive.toString() + " %"} />
+    </table>
   )
 }
 
