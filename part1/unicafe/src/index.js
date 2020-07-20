@@ -11,8 +11,11 @@ const Statistics = ({ good, neutral, bad }) => {
   let all = good + neutral + bad
 
   if (good === 0 && neutral === 0 && bad === 0) {
-    avaerage = 0
-    positive = 0
+    return(
+      <div>
+        <p>No feedback given</p>
+      </div>
+    )
   }
   return (
     <div>
