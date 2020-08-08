@@ -8,10 +8,26 @@ const Person = ({ person }) => {
   )
 }
 
+const PersonForm = ({ addPerson, newName, handleNameChange, newNumber, handleNumberChange }) => {
+  return (
+    <form onSubmit={addPerson}>
+      <div>name: <input value={newName} onChange={handleNameChange} /></div>
+      <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
+      <div><button type="submit">add</button></div>
+    </form>
+  )
+}
+
+const Filter = ({serachName,handlSearchChange}) =>{
+  return(
+    <div>filter shown with <input value={serachName} onChange={handlSearchChange} /></div>
+  )
+}
+
 const Numbers = ({ persons }) => {
   return (
     <div>
-      <h2>Numbers</h2>
+      <h3>Numbers</h3>
       <table>
         <tbody>
           {persons.map(person => <Person key={person.name} person={person} />)}
@@ -42,26 +58,15 @@ const App = () => {
     setNewNumber(event.target.value)
   }
 
-  const updatePersonToShow = (persons,filterWord) => {
+  const updatePersonToShow = (persons, filterWord) => {
     const personOdject = persons.filter(person => person.name.toLowerCase().indexOf(filterWord.toLowerCase()) !== -1
     )
-    console.log("in update,",personOdject)
     setPersonToShow(personOdject)
   }
 
   const handlSearchChange = (event) => {
     setSearchName(event.target.value)
-    updatePersonToShow(persons,event.target.value)
-    // const personOdject = event.target.value === ''
-    //   ? persons
-    //   : persons.filter(person => person.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
-    //   )
-    // setPersonToShow(personOdject)
-
-    console.log("t", event.target.value)
-    console.log("sn", serachName)
-    // console.log("po", personOdject)
-    console.log("p2s", personToShow)
+    updatePersonToShow(persons, event.target.value)
   }
 
   const addPerson = (event) => {
@@ -71,12 +76,12 @@ const App = () => {
     if (names.indexOf(newName) === -1) {
       const personObject = [{ name: newName, number: newNumber }]
       setPersons(persons.concat(personObject))
-      updatePersonToShow(persons.concat(personObject),serachName)
+      updatePersonToShow(persons.concat(personObject), serachName)
     }
     else {
       alert(`${newName} is already added to phonebook`)
     }
-    
+
     setNewName('')
     setNewNumber('')
   }
@@ -84,14 +89,16 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>filter shown with <input value={serachName} onChange={handlSearchChange} /></div>
+      <Filter serachName={serachName} handlSearchChange={handlSearchChange}/>
 
-      <h2>add a new</h2>
-      <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={handleNameChange} /></div>
-        <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
-        <div><button type="submit">add</button></div>
-      </form>
+      <h3>add a new</h3>
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
 
       <Numbers persons={personToShow} />
     </div>
