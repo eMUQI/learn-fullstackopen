@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Person = ({ person }) => {
   return (
@@ -18,8 +19,8 @@ const PersonForm = ({ addPerson, newName, handleNameChange, newNumber, handleNum
   )
 }
 
-const Filter = ({serachName,handlSearchChange}) =>{
-  return(
+const Filter = ({ serachName, handlSearchChange }) => {
+  return (
     <div>filter shown with <input value={serachName} onChange={handlSearchChange} /></div>
   )
 }
@@ -38,17 +39,21 @@ const Numbers = ({ persons }) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ])
+  const [persons, setPersons] = useState([])
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        setPersons(response.data)
+        setPersonToShow(response.data)
+      })
+  }, [])
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [serachName, setSearchName] = useState('')
-  const [personToShow, setPersonToShow] = useState(persons)
+  const [personToShow, setPersonToShow] = useState([])
 
   const handleNameChange = (event) => {
     setNewName(event.target.value)
@@ -89,7 +94,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter serachName={serachName} handlSearchChange={handlSearchChange}/>
+      <Filter serachName={serachName} handlSearchChange={handlSearchChange} />
 
       <h3>add a new</h3>
       <PersonForm
