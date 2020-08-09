@@ -17,8 +17,18 @@ const Filter = ({ countries, countryFilter, setCoutryFilter, countriesToShow, up
       {countriesToShow.length === 1 ? <></> :
         isToMany
           ? <p>To many matches, specify another filter</p>
-          : countriesToShow.map(country => <p key={country.name}>{country.name}</p>)}
+          : countriesToShow.map(country => <FilterResult key={country.name} countryName={country.name} updateCountriesToShow={updateCountriesToShow} countriesToShow={countriesToShow} />)}
     </div>
+  )
+}
+
+const FilterResult = ({ countryName, updateCountriesToShow, countriesToShow }) => {
+  const handleShowClick = () => {
+    updateCountriesToShow(countriesToShow, countryName)
+  }
+
+  return (
+    <p>{countryName}<button onClick={handleShowClick}>show</button></p>
   )
 }
 
