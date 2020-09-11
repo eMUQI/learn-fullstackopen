@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 
-const Filter = ({ countries, countryFilter, setCoutryFilter, countriesToShow, updateCountriesToShow, isToMany }) => {
+const api_key = process.env.REACT_APP_API_KEY
 
-  console.log("inF", countries)
-  console.log("inF2S", countriesToShow)
+const Filter = ({ countries, countryFilter, setcountryFilter, countriesToShow, updateCountriesToShow, isToMany }) => {
+
+  // console.log("inF", countries)
+  // console.log("inF2S", countriesToShow)
 
   const handleFilterChange = (event) => {
-    setCoutryFilter(event.target.value)
+    setcountryFilter(event.target.value)
     updateCountriesToShow(countries, event.target.value)
   }
 
@@ -38,21 +40,53 @@ const Country = ({ countriesToShow }) => {
       ?
       <div>
         <h2>{countriesToShow[0].name}</h2>
-        <p>capital {countriesToShow[0].capital}</p>
-        <p>population {countriesToShow[0].population}</p>
-        <h3>language</h3>
+        <p><strong>capital</strong> {countriesToShow[0].capital}</p>
+        <p><strong>population</strong> {countriesToShow[0].population}</p>
+        <h3>Spoken language</h3>
         <ul>
           {countriesToShow[0].languages.map(language => <li key={language.name}>{language.name}</li>)}
         </ul>
         <img src={countriesToShow[0].flag} alt={countriesToShow[0].name + "'s flag"} />
+        < Weather cityName={countriesToShow[0].capital} />
       </div>
       : <></>
   )
 }
 
+const Weather = ({ cityName }) => {
+  const [temperature, setTemperature] = useState()
+  const [windDegree, setWindDegree] = useState()
+  const [windSpeed, setWindSpeed] = useState()
+  const [statusIcon, setstatusIcon] = useState()
+
+
+  useEffect(() => {
+    axios
+      .get("http://api.weatherstack.com/current?access_key=" + api_key + "&query=" + cityName)
+      .then(response => {
+        console.log("api.weatherstack.com respone\n", response)
+        console.log(response.data)
+        console.log("ax", cityName)
+        setTemperature(response.data.current.temperature)
+        setWindDegree(response.data.current.wind_degree)
+        setWindSpeed(response.data.current.wind_speed)
+        setstatusIcon(response.data.current.weather_icons)
+      })
+  })
+
+  return (
+    <div>
+      <h3>Weather in {cityName}</h3>
+      <img src={statusIcon} alt=""/>
+      <p><strong>temperature:</strong>{temperature} Celsius</p>
+      <p><strong>wind:</strong>{windSpeed} mph direction {windDegree}</p>
+    </div>
+  )
+}
+
 const App = () => {
   const [countries, setCoutries] = useState([])
-  const [countryFilter, setCoutryFilter] = useState("")
+  const [countryFilter, setcountryFilter] = useState("")
   const [countriesToShow, setCoutriesToShow] = useState([])
   const [isToMany, setIsToMany] = useState(true)
 
@@ -60,7 +94,7 @@ const App = () => {
     axios
       .get("https://restcountries.eu/rest/v2/all")
       .then(response => {
-        console.log(response)
+        console.log("restcountries.eu response", response)
         console.log(response.data)
         setCoutries(response.data)
         setCoutriesToShow(response.data)
@@ -79,7 +113,7 @@ const App = () => {
       <Filter
         countries={countries}
         countryFilter={countryFilter}
-        setCoutryFilter={setCoutryFilter}
+        setcountryFilter={setcountryFilter}
         countriesToShow={countriesToShow}
         setCoutriesToShow={setCoutriesToShow}
         updateCountriesToShow={updateCountriesToShow}
@@ -87,6 +121,7 @@ const App = () => {
         setIsToMany={setIsToMany}
       />
       <Country countriesToShow={countriesToShow} />
+      {/* <Weather cityName="Landon" /> */}
     </div>
   )
 }
