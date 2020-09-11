@@ -3,13 +3,13 @@ import axios from 'axios'
 
 const api_key = process.env.REACT_APP_API_KEY
 
-const Filter = ({ countries, countryFilter, setcountryFilter, countriesToShow, updateCountriesToShow, isToMany }) => {
+const Filter = ({ countries, countryFilter, setCountryFilter, countriesToShow, updateCountriesToShow, isToMany }) => {
 
   // console.log("inF", countries)
   // console.log("inF2S", countriesToShow)
 
   const handleFilterChange = (event) => {
-    setcountryFilter(event.target.value)
+    setCountryFilter(event.target.value)
     updateCountriesToShow(countries, event.target.value)
   }
 
@@ -86,7 +86,7 @@ const Weather = ({ cityName }) => {
 
 const App = () => {
   const [countries, setCoutries] = useState([])
-  const [countryFilter, setcountryFilter] = useState("")
+  const [countryFilter, setCountryFilter] = useState("")
   const [countriesToShow, setCoutriesToShow] = useState([])
   const [isToMany, setIsToMany] = useState(true)
 
@@ -113,7 +113,7 @@ const App = () => {
       <Filter
         countries={countries}
         countryFilter={countryFilter}
-        setcountryFilter={setcountryFilter}
+        setCountryFilter={setCountryFilter}
         countriesToShow={countriesToShow}
         setCoutriesToShow={setCoutriesToShow}
         updateCountriesToShow={updateCountriesToShow}
